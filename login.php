@@ -1,26 +1,31 @@
 <?php
 session_start();
+require "config/config.php";
 require "config/common.php";
-require 'config/config.php';
-if($_POST){
-	$email = $_POST['email'];
-	$password = $_POST['password'];
-	$stmt = $pdo->prepare("SELECT * FROM users WHERE email=:email");
-	$stmt->execute(
-		array(':email'=>$email)
-	);
-	$user = $stmt->fetch(PDO::FETCH_ASSOC);
-	if($user){
-       if(password_verify($password,$user['password'])){
-		   $_SESSION['user_id'] = $user['id'];
-		   $_SESSION['username'] = $user['name'];
-		   $_SESSION['logged_in'] = time();
-		   header('Location:index.php');
-	   }
-	}else{
-		echo "<script>alert('incorrect credentials');</script>";
-	}
+if(!empty($_POST)){
+   $email = $_POST['email'];
+   $password = $_POST['password'];
+
+   $stmt = $pdo->prepare("SELECT * FROM users WHERE email=:email");
+   $stmt->bindValue(":email",$email);
+   $stmt->execute();
+   $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  if($user){
+     if( password_verify($password,$user['password'])){
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['logged_in'] = time();
+        $_SESSION['role'] = 0;
+		$_SESSION['username'] = $user['name'];
+		
+	    header("Location:index.php");
+	 
+	   }   
+  
+   }else{
+	echo "<script>alert('Incorrect credentials');</script>";
+   }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
@@ -119,17 +124,16 @@ if($_POST){
 					<div class="login_form_inner">
 						<h3>Log in to enter</h3>
 						<form class="row login_form" action="login.php" method="post" id="contactForm" novalidate="novalidate">
-						<input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
+						   <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
+								<input type="email" class="form-control" id="name" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'">
 							</div>
 							<div class="col-md-12 form-group">
-								<input type="text" class="form-control" id="name" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
+								<input type="password" class="form-control" id="name" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'">
 							</div>
 
 							<div class="col-md-12 form-group">
 								<button type="submit" value="submit" class="primary-btn">Log In</button>
-						
 							</div>
 						</form>
 					</div>

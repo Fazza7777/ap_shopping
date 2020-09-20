@@ -1,7 +1,6 @@
 <?php
 session_start();
 require "../config/config.php";
-
 require "../config/common.php";
 if(empty($_SESSION["user_id"] && empty($_SESSION["logged_in"])) && $_SESSION['role'] != 1){
    header("location:login.php");
@@ -33,7 +32,7 @@ if(!empty($_GET["pageno"])){
 }else{
     $pageno = 1;
 }
-$numOfrecord = 3;
+$numOfrecord = 1;
 $offset = ($pageno - 1) * $numOfrecord ;
 
 if(empty($_POST["search"]) && empty($_COOKIE["search"])){
@@ -53,7 +52,7 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
 
     $total_pages = ceil(count($rawResult) / $numOfrecord);
 
-    $stmt = $pdo->prepare("SELECT * FROM products  WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
+    $stmt = $pdo->prepare("SELECT * FROM products  WHERE name LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
     $stmt->execute();
     $result = $stmt->fetchAll();
 }

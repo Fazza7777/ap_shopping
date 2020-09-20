@@ -14,13 +14,19 @@ $currentAccount = $stmtCur->fetchAll();
 //update account
 
 if($_POST){
-    if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4){
+    if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || empty($_POST['phone']) || empty($_POST['address']) || strlen($_POST['password']) < 4){
         if(empty($_POST['name'])){
            $nameError = "Name cannot be empty!";
         }
         if(empty($_POST['email'])){
            $emailError = "Email cannot be empty!";
         }
+        if(empty($_POST['phone'])){
+            $phoneError = "Phone number is cannot be empty!";
+         }
+         if(empty($_POST['address'])){
+            $sdError = "Address cannot be empty!";
+         }
         if(empty($_POST['password'])){
            $passwordError = "Password cannot be empty!";
         }
@@ -31,6 +37,8 @@ if($_POST){
         $id = $_POST['id'];
         $name = $_POST['name'];
         $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $address = $_POST['address'];
         $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
         if(empty($_POST['role'])){
             $role = '0';
@@ -43,7 +51,7 @@ if($_POST){
         if($user){
             echo "<script>alert('Update email is already exit .');</script>";
         }else{
-         $stmt = $pdo->prepare("UPDATE users SET name='$name',email='$email',password='$password',role='$role' WHERE id='$id'");
+         $stmt = $pdo->prepare("UPDATE users SET name='$name',email='$email',password='$password',address='$address',phone='$phone',role='$role' WHERE id='$id'");
         $update = $stmt->execute();
          if($update){
              header("location:user_list.php");
@@ -81,6 +89,16 @@ if($_POST){
                                 <input type="hidden"  name='id'  value="<?php echo $currentAccount[0]['id']; ?>">
                                 <input type="text" class="form-control" name='name' require value="<?php echo escape($currentAccount[0]['name']); ?>">
                                 <span class="text-danger"><?php echo empty($nameError) ? '' : $nameError ; ?></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Phone</label>
+                                <input type="number" class="form-control" name='phone' value="<?php echo $currentAccount[0]['phone']; ?>" require>
+                                <span class="text-danger"><?php echo empty($phoneError) ? '' : $phoneError ; ?></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Address</label>
+                                <input type="text" class="form-control" name='address' require value="<?php echo $currentAccount[0]['address']; ?>">
+                                <span class="text-danger"><?php echo empty($adError) ? '' : $adError ; ?></span>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>

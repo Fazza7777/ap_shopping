@@ -10,12 +10,18 @@ if($_SESSION['role'] != 1){
     header("location:login.php");
 }
 if($_POST){
-  if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 4){
+  if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['phone']) || empty($_POST['address']) || empty($_POST['password']) || strlen($_POST['password']) < 4){
      if(empty($_POST['name'])){
         $nameError = "Name cannot be empty!";
      }
      if(empty($_POST['email'])){
         $emailError = "Email cannot be empty!";
+     }
+     if(empty($_POST['phone'])){
+        $phoneError = "Phone number is cannot be empty!";
+     }
+     if(empty($_POST['address'])){
+        $sdError = "Address cannot be empty!";
      }
      if(empty($_POST['password'])){
         $passwordError = "Password cannot be empty!";
@@ -26,17 +32,21 @@ if($_POST){
   }else{
     $name = $_POST['name'];
     $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
     $password = password_hash( $_POST['password'],PASSWORD_DEFAULT);
     if(empty($_POST['role'])){
       $role = '0';
     }else{
       $role = '1';
     }
-   $stmt = $pdo->prepare("INSERT INTO users (name,email,password,role) VALUES (:name,:email,:password,:role)");
+   $stmt = $pdo->prepare("INSERT INTO users (name,email,password,address,phone,role) VALUES (:name,:email,:password,:address,:phone,:role)");
    $result =$stmt->execute(array(
         'name'=>$name,
         'email'=>$email,
         'password'=>$password,
+        'address'=>$address,
+        'phone'=>$phone,
         'role'=>$role
    )
    );
@@ -74,6 +84,16 @@ if($_POST){
                                 <label for="name">Name</label>
                                 <input type="text" class="form-control" name='name' require>
                                 <span class="text-danger"><?php echo empty($nameError) ? '' : $nameError ; ?></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Phone</label>
+                                <input type="number" class="form-control" name='phone' require>
+                                <span class="text-danger"><?php echo empty($phoneError) ? '' : $phoneError ; ?></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Address</label>
+                                <input type="text" class="form-control" name='address' require>
+                                <span class="text-danger"><?php echo empty($adError) ? '' : $adError ; ?></span>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>

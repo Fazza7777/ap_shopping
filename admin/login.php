@@ -11,7 +11,7 @@ if(!empty($_POST)){
    $stmt->execute();
    $user = $stmt->fetch(PDO::FETCH_ASSOC);
   if($user){
-     if( password_verify($password,$user['password'])){
+     if( password_verify($password,$user['password']) && $user['role']==1){
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = 1;
         $_SESSION['logged_in'] = time();

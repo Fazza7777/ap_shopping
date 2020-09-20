@@ -58,6 +58,8 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
                         <th style="width: 10px">No</th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Phone</th>
+                        <th>Email</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
@@ -71,6 +73,8 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
                             <td><?php echo $i; ?></td>
                             <td><?php echo escape($user['name']);?></td>
                             <td><?php echo escape(substr($user['email'],0,50));?></td>
+                            <td><?php echo escape($user['phone']);?></td>
+                            <td><?php echo escape($user['address']);?></td>
                             <td><?php echo $user['role'] == 1 ? '<span class=\'text-success text-bold \'>admin </span>' : '<span class=\'text-info text-bold \'>user </span>';?></td>
                             <td class='text-center'>
                                 <a href="user_edit.php?id=<?php echo $user['id']; ?>" class="btn btn-primary mr-2">Edit</a>

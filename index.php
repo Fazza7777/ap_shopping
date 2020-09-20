@@ -1,10 +1,9 @@
+<?php
+require "config/config.php";
+
+?>
 <?php require "header.php"; ?>
 <?php
-if(session_status() == PHP_SESSION_NONE){
-    session_start();
-}
-require "config/config.php";
-require "config/common.php";
 
 if(empty($_POST['search'])){
     if(empty($_GET["pageno"])){
@@ -20,7 +19,7 @@ if(!empty($_GET["pageno"])){
 }else{
     $pageno = 1;
 }
-$numOfrecord = 3;
+$numOfrecord = 6;
 $offset = ($pageno - 1) * $numOfrecord ;
 
 if(empty($_POST["search"]) && empty($_COOKIE["search"])){
@@ -32,6 +31,7 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
     $stmt = $pdo->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfrecord ");
     $stmt->execute();
     $result = $stmt->fetchAll();
+
  }else{
     $searchKey = empty($_POST['search']) ? $_COOKIE["search"] : $_POST['search'] ;
     $stmt = $pdo->prepare("SELECT * FROM products ORDER BY id DESC");
@@ -40,9 +40,35 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
 
     $total_pages = ceil(count($rawResult) / $numOfrecord);
 
-    $stmt = $pdo->prepare("SELECT * FROM products  WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
+    $stmt = $pdo->prepare("SELECT * FROM products  WHERE name LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
     $stmt->execute();
     $result = $stmt->fetchAll();
+}
+if(!(empty($_GET['id']))){
+
+    if( (empty($_POST["search"])) && (empty($_COOKIE["search"]))){
+        $getId = $_GET['id'];   
+        $stmt = $pdo->prepare("SELECT * FROM products WHERE category_id=$getId");
+        $stmt->execute();
+        $rawResult = $stmt->fetchAll();
+    
+        $total_pages = ceil(count($rawResult) / $numOfrecord);
+    
+        $stmt = $pdo->prepare("SELECT * FROM products  WHERE category_id=$getId LIMIT $offset,$numOfrecord ");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+    }else{
+        $getId = $_GET['id'];   
+        $stmt = $pdo->prepare("SELECT * FROM products WHERE category_id=$getId");
+        $stmt->execute();
+        $rawResult = $stmt->fetchAll();
+    
+        $total_pages = ceil(count($rawResult) / $numOfrecord);
+    
+        $stmt = $pdo->prepare("SELECT * FROM products  WHERE category_id=$getId name LIKE %search% LIMIT $offset,$numOfrecord ");
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+    }
 }
 ?>
 <div class="container">
@@ -58,7 +84,7 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
                              $categories = $catStmt->fetchAll();
                           
                              foreach($categories as $category){ ?>   
-                             <a data-toggle="collapse" href="#meatFish" ><spanclass="lnr lnr-arrow-right"></span><?php echo escape($category['name']); ?></a>
+                             <a  href="index.php?id=<?php echo escape($category['id']); ?>" ><spanclass="lnr lnr-arrow-right"></span><?php echo escape($category['name']); ?></a>
                         <?php } ?>
                       </li>
 
@@ -82,21 +108,21 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
 <section class="lattest-product-area pb-40 category-list">
     <div class="row">
        <?php
-        // if($products){
-           //  foreach($products as $key => $val){?>
+            if($result){
+            foreach($result as $key => $product){?>
             <!-- single product -->
             <div class="col-lg-4 col-md-6">
                 <div class="single-product">
-                    <img class="img-fluid" src="img/product/p1.jpg" alt="">
+                    <img  height=230 src="admin/images/<?php echo escape($product['image']); ?>" alt="img not found">
                     <div class="product-details">
-                        <h6>addidas New Hammer sole for Sports person</h6>
+                        <h6><?php echo escape($product['name']); ?></h6>
                         <div class="price">
-                            <h6>$150.00</h6>
-                            <h6 class="l-through">$210.00</h6>
+                            <h6><?php echo escape($product['price']) / $product['quantity']; ?></h6>
+                          
                         </div>
                         <div class="prd-bottom">
 
-                            <a href="" class="social-info">
+                            <a href="logout.php" class="social-info">
                                 <span class="ti-bag"></span>
                                 <p class="hover-text">add to bag</p>
                             </a>
@@ -111,8 +137,8 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
             </div>
             <!-- single product -->
         <?php
-          //  }
-       //  }
+           }
+        }
         ?>
     </div>
 </section>

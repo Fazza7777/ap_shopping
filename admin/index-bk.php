@@ -33,7 +33,7 @@ if(!empty($_GET["pageno"])){
 }else{
     $pageno = 1;
 }
-$numOfrecord = 3;
+$numOfrecord =1;
 $offset = ($pageno - 1) * $numOfrecord ;
 
 if(empty($_POST["search"]) && empty($_COOKIE["search"])){
@@ -53,7 +53,7 @@ if(empty($_POST["search"]) && empty($_COOKIE["search"])){
 
     $total_pages = ceil(count($rawPosts) / $numOfrecord);
 
-    $stmt = $pdo->prepare("SELECT * FROM posts  WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
+    $stmt = $pdo->prepare("SELECT * FROM posts  WHERE name LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
     $stmt->execute();
     $posts = $stmt->fetchAll();
 }
