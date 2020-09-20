@@ -37,62 +37,50 @@ $numOfrecord = 3;
 $offset = ($pageno - 1) * $numOfrecord ;
 
 if(empty($_POST["search"]) && empty($_COOKIE["search"])){
-    $stmt = $pdo->prepare("SELECT * FROM products ORDER BY id DESC");
+    $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
     $stmt->execute();
-    $rawResult = $stmt->fetchAll();
-    $total_pages = ceil(count($rawResult) / $numOfrecord);
+    $rawPosts = $stmt->fetchAll();
+    $total_pages = ceil(count($rawPosts) / $numOfrecord);
 
-    $stmt = $pdo->prepare("SELECT * FROM products ORDER BY id DESC LIMIT $offset,$numOfrecord ");
+    $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC LIMIT $offset,$numOfrecord ");
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $posts = $stmt->fetchAll();
  }else{
     $searchKey = empty($_POST['search']) ? $_COOKIE["search"] : $_POST['search'] ;
-    $stmt = $pdo->prepare("SELECT * FROM products ORDER BY id DESC");
+    $stmt = $pdo->prepare("SELECT * FROM posts ORDER BY id DESC");
     $stmt->execute();
-    $rawResult = $stmt->fetchAll();
+    $rawPosts = $stmt->fetchAll();
 
-    $total_pages = ceil(count($rawResult) / $numOfrecord);
+    $total_pages = ceil(count($rawPosts) / $numOfrecord);
 
-    $stmt = $pdo->prepare("SELECT * FROM products  WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
+    $stmt = $pdo->prepare("SELECT * FROM posts  WHERE title LIKE '%$searchKey%' ORDER BY id DESC LIMIT $offset,$numOfrecord ");
     $stmt->execute();
-    $result = $stmt->fetchAll();
+    $posts = $stmt->fetchAll();
 }
 ?>
 <div class="card-body">
-    <a href="product_add.php" class="btn btn-success mb-3">New Product</a>
+    <a href="add.php" class="btn btn-success mb-3">New Blog Post</a>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th style="width: 10px">No</th>
-                <th>Name</th>
+                <th>Title</th>
                 <th>Description</th>
-                <th>Category</th>
-                <th>In Stock</th>
-                <th>Price</th>
-                <th>Actions</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            if($result){
+            if($posts){
                 $i = 1;
-                foreach($result as $product){ ?>
-                <?php
-                 $catstmt = $pdo->prepare("SELECT * FROM categories  WHERE id=".$product['category_id']);
-                 $catstmt->execute();
-                 $category = $catstmt->fetchAll();
-                    
-                ?>
+                foreach($posts as $post){ ?>
                 <tr>
                     <td><?php echo $i; ?></td>
-                    <td><?php echo escape($product['name']);?></td>
-                    <td><?php echo escape(substr($product['description'],0,30));?></td>
-                    <td><?php echo escape($category[0]['name']);?></td>
-                    <td><?php echo escape($product['quantity']);?></td>
-                    <td><?php echo escape($product['price']);?></td>
+                    <td><?php echo escape($post['title']);?></td>
+                    <td><?php echo escape(substr($post['content'],0,50));?></td>
                     <td class='text-center'>
-                        <a href="product_edit.php?id=<?php echo $product['id']; ?>" class="btn btn-primary mr-2">Edit</a>
-                        <a href="product_delete.php?id=<?php echo $product['id']; ?>" class="btn btn-danger " onclick="return confirm('Are you sure delete')">Delete</a>
+                        <a href="edit.php?id=<?php echo $post['id']; ?>" class="btn btn-primary mr-2">Edit</a>
+                        <a href="delete.php?id=<?php echo $post['id']; ?>" class="btn btn-danger " onclick="return confirm('Are you sure delete')">Delete</a>
                     </td>
                 </tr>  
 

@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -79,49 +82,4 @@
         </div>
     </section>
     <!-- End Banner Area -->
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-3 col-lg-4 col-md-5">
-                <div class="sidebar-categories">
-                    <div class="head">Browse Categories</div>
-                    <ul class="main-categories">
-                        <li class="main-nav-list"><a data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false" aria-controls="fruitsVegetable"><span
-								 class="lnr lnr-arrow-right"></span>Fruits and Vegetables<span class="number">(53)</span></a>
-                            <ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false" aria-controls="fruitsVegetable">
-                                <li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
-                            </ul>
-                        </li>
-
-                        <li class="main-nav-list"><a data-toggle="collapse" href="#meatFish" aria-expanded="false" aria-controls="meatFish"><span
-								 class="lnr lnr-arrow-right"></span>Meat and Fish<span class="number">(53)</span></a>
-                            <ul class="collapse" id="meatFish" data-toggle="collapse" aria-expanded="false" aria-controls="meatFish">
-                                <li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
-                                <li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
-                            </ul>
-                        </li>
-
-                </div>
-
-            </div>
-            <div class="col-xl-9 col-lg-8 col-md-7">
-                <!-- Start Filter Bar -->
-                <div class="filter-bar d-flex flex-wrap align-items-center">
-
-                    <div class="pagination">
-                        <a href="#" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
-                        <a href="#" class="active">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#" class="dot-dot"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
-                        <a href="#">6</a>
-                        <a href="#" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
-                    </div>
-                </div>
-                <!-- End Filter Bar -->
+  

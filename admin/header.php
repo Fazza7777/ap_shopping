@@ -26,23 +26,21 @@
         </ul>
 
         <!-- SEARCH FORM -->
-        <?php
-            $curUrl =  $_SERVER["PHP_SELF"];
-            $ary = explode('/',$curUrl);
-            $page = end($ary);
-
-        ?>
-
-   <form class="form-inline ml-3" method="post" 
-    <?php if($page == 'index.php') : ?>
-        action = "index.php"
-    <?php elseif($page == 'category.php') : ?>
-        action = "category.php"
-    <?php elseif($page == 'user_list.php') : ?>
-        action = "user_list.php"
-    <?php endif; ?>
-   >
-   <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
+<?php
+$curUrl =  $_SERVER["PHP_SELF"];
+$ary = explode('/',$curUrl);
+$page = end($ary);
+if($page != 'order_detail.php' && $page != 'order_list.php'){?>
+      <form class="form-inline ml-3" method="post" 
+        <?php if($page == 'index.php') : ?>
+            action = "index.php"
+        <?php elseif($page == 'category.php') : ?>
+            action = "category.php"
+        <?php elseif($page == 'user_list.php') : ?>
+            action = "user_list.php"
+        <?php endif; ?>
+        >
+         <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
         <div class="input-group input-group-sm">
             <input name="search" class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
             <div class="input-group-append">
@@ -51,7 +49,10 @@
             </button>
             </div>
         </div>
-        </form>
+      </form>
+<?php }?>
+
+     
 
 
     </nav>
@@ -90,6 +91,14 @@
                     <i class="nav-icon fas fa-shopping-cart"></i>
                     <p>
                         Category
+                    </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="order_list.php" class="nav-link">
+                    <i class="nav-icon fa fa-list-alt"></i>
+                    <p>
+                        Order
                     </p>
                     </a>
                 </li>
