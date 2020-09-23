@@ -3,6 +3,16 @@ if(session_status() == PHP_SESSION_NONE){
     session_start();
 }
 require "config/common.php";
+if(empty($_SESSION['user_id'])){
+    header("location:login.php");
+}
+$card = 0;
+if(isset($_SESSION['card'])){
+    foreach($_SESSION['card'] as $qty){
+        $card += $qty;
+      } 
+ }
+
 ?>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
@@ -53,7 +63,7 @@ require "config/common.php";
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
                         <ul class="nav navbar-nav navbar-right ml-auto">
-                            <li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
+                            <li class="nav-item"><a href="<?php echo $card == 0 ? 'index.php' : 'cart.php'; ?>" class="cart "><span class="ti-bag"></span><span class='ml-2'><?php echo $card == 0 ? '' : $card; ?></span> </a></li>
                             <li class="nav-item">
                                 <button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
                             </li>
@@ -76,11 +86,12 @@ require "config/common.php";
     <!-- End Header Area -->
 
     <!-- Start Banner Area -->
-    <section class="banner-area organic-breadcrumb">
+    <section class="banner-area organic-breadcrumb mb-2">
         <div class="container">
             <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
                 <div class="col-first">
-                    <h1>Welcome Shop</h1>
+                    <h1>Welcome <span style='font-size:20px;'><?php echo $_SESSION['username']; ?></span></h1>
+                    <p> <a  class='text-white' href="logout.php">Logout</a></p>
                 </div>
             </div>
         </div>

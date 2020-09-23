@@ -133,7 +133,7 @@ if(!empty($_POST)){
 							</div>
 
 							<div class="col-md-12 form-group">
-								<button type="submit" value="submit" class="primary-btn">Log In</button>
+								<button type="submit" class="primary-btn">Log In</button>
 							</div>
 						</form>
 					</div>

@@ -1,3 +1,38 @@
+<?php
+session_start();
+require 'config/config.php';
+require 'config/common.php';
+$current_userId = $_SESSION['user_id'];
+$total = 0;
+if(isset($_SESSION['card'])){
+	foreach($_SESSION['card'] as $id => $qty){
+		$id = str_replace('id=','',$id);
+		$stmt = $pdo->prepare("SELECT * FROM products WHERE id=$id");
+		$stmt->execute();
+		$result = $stmt->fetchAll(); 
+		$total += $result[0]['price']  * $qty;
+	}
+//insert into sale_orders table
+$stmt = $pdo->prepare("INSERT INTO sale_orders (user_id,total_price,order_date) VALUES (:user_id,:total_price,:order_date)");
+$result = $stmt->execute(array(':user_id'=>$current_userId,':total_price'=>$total,':order_date'=>date('Y-m-d h:i:s',time())));
+if($result){
+   $sale_orderId = $pdo->lastInsertId();
+//Insert into sale_order_detail table
+	foreach($_SESSION['card'] as $id => $qty){
+		$id = str_replace('id=','',$id);
+		$stmt = $pdo->prepare("INSERT INTO sale_order_detail (sale_order_id,product_id,quantity) VALUES (:so_id,:p_id,:quantity)");
+        $result = $stmt->execute(array(':so_id'=>$sale_orderId,':p_id'=>$id,':quantity'=>$qty));
+		$qtyStmt = $pdo->prepare("SELECT quantity FROM products WHERE id=$id");
+		$qtyStmt->execute();
+		$qResult = $qtyStmt->fetch(PDO::FETCH_OBJ);
+		$updateQuantity = $qResult->quantity - $qty;
+		$stmt = $pdo->prepare("UPDATE products SET quantity=:qty WHERE id=:pid");
+		$stmt->execute(array(':qty'=>$updateQuantity,':pid'=>$id));
+	}
+	unset($_SESSION['card']);
+}
+}
+?>
 <!DOCTYPE html>
 <html lang="zxx" class="no-js">
 
@@ -38,7 +73,7 @@
 			<nav class="navbar navbar-expand-lg navbar-light main_box">
 				<div class="container">
                     <!-- Brand and toggle get grouped for better mobile display -->
-                    <a class="navbar-brand logo_h" href="index.html">AP Shopping</a>
+                    <a class="navbar-brand logo_h" href="index.php">AP Shopping</a>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
@@ -88,39 +123,15 @@
 	<section class="order_details section_gap">
 		<div class="container">
 			<h3 class="title_confirmation">Thank you. Your order has been received.</h3>
-			<div class="row order_d_inner">
-				<div class="col-lg-6">
-					<div class="details_item">
-						<h4>Order Info</h4>
-						<ul class="list">
-							<li><a href="#"><span>Order number</span> : 60235</a></li>
-							<li><a href="#"><span>Date</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Total</span> : USD 2210</a></li>
-							<li><a href="#"><span>Payment method</span> : Check payments</a></li>
-						</ul>
-					</div>
-				</div>
-			
-				<div class="col-lg-6">
-					<div class="details_item">
-						<h4>Shipping Address</h4>
-						<ul class="list">
-							<li><a href="#"><span>Street</span> : 56/8</a></li>
-							<li><a href="#"><span>City</span> : Los Angeles</a></li>
-							<li><a href="#"><span>Country</span> : United States</a></li>
-							<li><a href="#"><span>Postcode </span> : 36952</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
+		
 		
 		</div>
 	</section>
 	<!--================End Order Details Area =================-->
 
 	<!-- start footer Area -->
-	<footer class="footer-area section_gap">
-		<div class="container">
+	<footer class="footer-area section_gap pt-0">
+		<div class="container ">
 			
 			<div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
 				<p class="footer-text m-0"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->

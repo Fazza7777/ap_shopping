@@ -4,7 +4,7 @@
 </div>
 
 <!-- start footer Area -->
-<footer class="footer-area section_gap">
+<footer class="footer-area section_gap pt-0">
     <div class="container">
 
         <div class="footer-bottom d-flex justify-content-center align-items-center flex-wrap">
