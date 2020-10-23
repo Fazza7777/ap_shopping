@@ -24,7 +24,7 @@ if(!empty($_GET["pageno"])){
 }else{
     $pageno = 1;
 }
-$numOfrecord = 3;
+$numOfrecord =3;
 $offset = ($pageno - 1) * $numOfrecord ;
 
 $getid =$_GET['id'];
@@ -60,9 +60,10 @@ $result = $stmt->fetchAll();
                     <?php
                        $pStmt = $pdo->prepare("SELECT * FROM products WHERE id=".$orderdetail['product_id']);
                        $pStmt->execute();
-                       $product =  $pStmt->fetch(PDO::FETCH_ASSOC);
+                       $product =  $pStmt->fetchAll();
+
                     ?>
-                    <td><?php echo escape($product['name']);?></td>
+                    <td><?php echo escape($product[0]['name']);?></td>
                    
                     <td><?php echo escape($orderdetail['quantity']);?></td>
                     <td><?php echo escape(date("Y-m-d",strtotime($orderdetail['order_date'])));?></td>
@@ -81,15 +82,15 @@ $result = $stmt->fetchAll();
     </table>                
     <nav aria-label="Page navigation">
     <ul class="pagination mt-3">
-            <li class="page-item "><a class="page-link" href="?pageno=1">First</a></li>
+            <li class="page-item "><a class="page-link" href="?id=<?php echo $_GET['id']; ?>& pageno=1">First</a></li>
             <li class="page-item <?php echo $pageno <= 1 ? 'disabled' : '' ?>">
-                <a class="page-link" href="<?php echo $pageno <= 1? '#' : '?pageno='.($pageno-1); ?>">Previous</a>
+                <a class="page-link" href="<?php echo $pageno <= 1? '#' : '?id='.$_GET['id'].'&pageno='.($pageno-1); ?>">Previous</a>
             </li>
             <li class="page-item"><a class="page-link" href="#"><?php echo $pageno; ?></a></li>
             <li class="page-item <?php echo $pageno >= $total_pages ? 'disabled' : ''; ?>">
-                <a class="page-link" href="<?php echo $pageno >= $total_pages ? '#' : '?pageno='.($pageno+1);  ?>">Next</a>
+                <a class="page-link" href="<?php echo $pageno >= $total_pages ? '#' : '?id='.$_GET['id'].'&pageno='.($pageno+1);  ?>">Next</a>
             </li>
-            <li class="page-item"><a class="page-link" href="?pageno=<?php echo $total_pages; ?>">Last</a></li>
+            <li class="page-item"><a class="page-link" href="?id=<?php echo $_GET['id']; ?>&pageno=<?php echo $total_pages; ?>">Last</a></li>
         </ul>
     </nav>
     </div>

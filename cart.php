@@ -28,7 +28,7 @@ require 'config/config.php';
                                        $stmt = $pdo->prepare("SELECT * FROM products WHERE id=$id");
                                        $stmt->execute();
                                        $result = $stmt->fetchAll(); 
-                                       $total += $result[0]['price'] / $result[0]['quantity'] * $qty;
+                                       $total += $result[0]['price']  * $qty;
                                        ?>
                                          <tr>
                                     <td>
@@ -42,7 +42,7 @@ require 'config/config.php';
                                         </div>
                                     </td>
                                     <td>
-                                        <h5><?php echo escape($result[0]['price'] / $result[0]['quantity'] ); ?></h5>
+                                        <h5><?php echo escape($result[0]['price'] ); ?></h5>
                                     </td>
                                     <td>
                                         <div class="product_count">
@@ -52,7 +52,7 @@ require 'config/config.php';
                                         </div>
                                     </td>
                                     <td>
-                                        <h5><?php echo escape($result[0]['price'] / $result[0]['quantity'] * $qty); ?></h5>
+                                        <h5><?php echo escape($result[0]['price']  * $qty); ?></h5>
                                     </td>
                                     <td>
                                     <a href='cart_item_delete.php?id=<?php echo $result[0]['id'] ?>'style='font-size:30px;'>X</a>

@@ -38,7 +38,7 @@ $result = $stmt->fetchAll();
  
 ?>
 <div class="card-body">
-    <a href="cat_add.php" class="btn btn-success mb-3">New Category</a>
+
     <table class="table table-bordered">
         <thead>
             <tr>
